@@ -1,4 +1,8 @@
 from django.shortcuts import render,get_object_or_404
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
+
+
 
 # Create your views here.
 from .models import Course,enrolement,Content,Contact,ContentVedio,Progress
@@ -40,10 +44,12 @@ class CourseListView(coursemainview,ListView):
             context['enrolled_courses'] = []
         return context
 
+# filepath: 
 class CourseContentDetailView(LoginRequiredMixin, DetailView):
     model = Content
     template_name = 'myapp/mother.html'
     context_object_name = 'selected_content'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         course_slug = self.kwargs.get('course_slug')
@@ -51,8 +57,15 @@ class CourseContentDetailView(LoginRequiredMixin, DetailView):
         context['course'] = course
         context['contents'] = course.content_set.all()
         context['videos'] = ContentVedio.objects.filter(content=self.object)
+        # Add completed content IDs for the user
+        if self.request.user.is_authenticated:
+            completed_ids = Progress.objects.filter(
+                user=self.request.user, course=course, completed=True
+            ).values_list('content_id', flat=True)
+            context['completed_content_ids'] = set(completed_ids)
+        else:
+            context['completed_content_ids'] = set()
         return context
-    
 class ContactView(CreateView):
     model = Contact
     template_name = 'myapp/contact.html'
@@ -139,3 +152,16 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
+
+@method_decorator(require_POST, name='dispatch')
+class MarkContentDoneView(LoginRequiredMixin, View):
+    def post(self, request, course_slug, content_id):
+        course = get_object_or_404(Course, slug=course_slug)
+        content = get_object_or_404(Content, id=content_id, course=course)
+        Progress.objects.get_or_create(
+            user=request.user,
+            course=course,
+            content=content,
+            defaults={'completed': True}
+        )
+        return redirect(request.META.get('HTTP_REFERER', 'courselist'))

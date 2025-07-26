@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import coursecreate_view,home,CourseListView,CourseContentDetailView,ContactView,registerview,UserLogin,LogoutViewAllow,enrollmentview,UserDetailView,UserUpdateView
+from .views import coursecreate_view,home,CourseListView,CourseContentDetailView,ContactView,registerview,UserLogin,LogoutViewAllow,enrollmentview,UserDetailView,UserUpdateView,MarkContentDoneView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('',home,name='home'),
+    path('home/',home,name='home'),
     path('create_course/',coursecreate_view.as_view(),name='create_course'),
     path('courselist/',CourseListView.as_view(),name='courselist'),
     path('courses/<slug:course_slug>/<slug:slug>/',CourseContentDetailView.as_view(),name='course-content-detail'),
@@ -15,6 +15,8 @@ urlpatterns = [
     #path('videos/', VideoListView.as_view(), name='videos'),
     path('profile/', UserDetailView.as_view(), name='profile'),
     path('profile/edit/', UserUpdateView.as_view(), name='profile-edit'),
+    path('courses/<slug:course_slug>/content/<int:content_id>/done/', MarkContentDoneView.as_view(), name='mark_content_done'),
+
 
 
 ]

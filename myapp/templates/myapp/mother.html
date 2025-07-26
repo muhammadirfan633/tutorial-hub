@@ -68,6 +68,20 @@
       <div class="col-md-5 p-4" style="max-height: 400px; overflow-y: auto;">
     <h2>{{ selected_content.title }}</h2>
     <p>{{ selected_content.body }}</p>
+  <!-- Show selected content details -->
+<h3>{{ selected_content.title }}</h3>
+<p>{{ selected_content.body }}</p>
+
+{% if user.is_authenticated %}
+  {% if selected_content.id in completed_content_ids %}
+    <button class="btn btn-success" disabled>Done</button>
+  {% else %}
+    <form method="post" action="{% url 'mark_content_done' course_slug=course.slug content_id=selected_content.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">Done</button>
+    </form>
+  {% endif %}
+{% endif %}
 </div>
 
         <div class="col-md-4 p-4">

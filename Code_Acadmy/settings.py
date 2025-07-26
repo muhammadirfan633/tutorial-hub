@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-f5-krp5bn0%axryhf13s02fe-hl(_jo8#x#2#lriy(m1t9bek#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+#ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['muhammadirfan.pythonanywhere.com']
+
 
 
 # Application definition
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'Code_Acadmy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'Code_Acadmy/templates'],
+        'DIRS': [BASE_DIR / 'myapp/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
