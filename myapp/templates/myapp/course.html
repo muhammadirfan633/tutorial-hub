@@ -1,0 +1,19 @@
+<!-- templates/book_form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create New Book</title>
+</head>
+<body>
+    <h1>Add a New Book</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Create</button>
+    </form>
+
+    <a href="{% url 'courselist' %}">Back to Course List</a>
+</body>
+</html>

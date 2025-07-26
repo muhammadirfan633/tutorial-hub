@@ -1,0 +1,113 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile Page</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'myapp/css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'myapp/css/profile.css' %}" />
+</head>
+<body class="d-flex flex-column h-100">
+     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="{% url 'home' %}"><span class="fw-bolder text-primary">Code Academy</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url "courselist" %}">Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url "contact" %}">Contact Us</a></li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                            {% else %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Signup</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+  <div class="container">
+    <!-- Profile Section -->
+    <div class="card">
+      <h2>Profile Information</h2>
+                <h2>User Profile</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>First Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+
+            <a href="{% url 'profile-edit' %}">Edit Profile</a>
+
+     <h2>Edit Profile</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+  <a href="{% url 'profile' %}">Cancel</a>
+</form>
+
+    </div>
+
+    <!-- Enrolled Courses -->
+   <h2>My Enrolled Courses & Progress</h2>
+<ul>
+  {% for item in progress_list %}
+    <li>
+      <strong>{{ item.course.course_name }}</strong>:
+      {{ item.completed }} of {{ item.total }} contents read
+      ({{ item.percent }}%)
+      <div style="background:#eee;width:200px;">
+        <div style="background:#4caf50;width:{{ item.percent }}%;height:10px;"></div>
+      </div>
+    </li>
+  {% empty %}
+    <li>You are not enrolled in any courses.</li>
+  {% endfor %}
+</ul>
+  </div>
+
+   <footer class="bg-white py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2025</div></div>
+                    <div class="col-auto">
+                        <a class="small" href="#!">Privacy</a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="#!">Terms</a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="{% url "contact" %}">Contact us</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+  <script>
+    function toggleEdit(isEditing) {
+      document.getElementById("profileView").style.display = isEditing ? "none" : "block";
+      document.getElementById("profileEdit").style.display = isEditing ? "block" : "none";
+    }
+
+    function saveProfile() {
+      const name = document.getElementById("editName").value;
+      const email = document.getElementById("editEmail").value;
+      document.getElementById("viewName").textContent = name;
+      document.getElementById("viewEmail").textContent = email;
+      toggleEdit(false);
+    }
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'myapp/js/scripts.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!-- templates/book_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+    <h1>All Courses</h1>
+
+    <ul>
+        {% for course in courses %}
+            <li>
+                <a href="#">
+                    {{ course.course_name }} 
+                </a>
+            </li>
+        {% empty %}
+            <li>No courses available.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'create_course' %}">Add a New Course</a>
+</body>
+</html>
