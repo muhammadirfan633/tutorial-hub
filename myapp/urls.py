@@ -3,7 +3,7 @@ from .views import coursecreate_view,home,CourseListView,CourseContentDetailView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('home/',home,name='home'),
+    path('',home,name='home'),
     path('create_course/',coursecreate_view.as_view(),name='create_course'),
     path('courselist/',CourseListView.as_view(),name='courselist'),
     path('courses/<slug:course_slug>/<slug:slug>/',CourseContentDetailView.as_view(),name='course-content-detail'),
