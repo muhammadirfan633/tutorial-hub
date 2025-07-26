@@ -16,7 +16,7 @@ from django.core.wsgi import get_wsgi_application
 
 
 # add your project path
-path = '"D:\Django_projects\Code_Acadmy"'
+path = '/home/muhammadirfan/tutorial-hub'
 if path not in sys.path:
     sys.path.insert(0, path)
 
